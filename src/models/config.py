@@ -2,7 +2,6 @@ from os import environ
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 from pydash import snake_case
-# from google.cloud import datastore
 
 
 class Config(ndb.Model):

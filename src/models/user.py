@@ -6,19 +6,18 @@ class User(ndb.Model):
     """Models an individual user"""
     refresh_token = ndb.StringProperty()
     partner_id = ndb.StringProperty()
+    account_id = ndb.StringProperty()
 
     @classmethod
     def get(cls, user_id):
         entity = cls(key=model.Key(cls, user_id))
 
-        def txn(): return False if not entity.key.get() else entity.key
-        retval = model.transaction(txn).get()
+        def txn(): return None if not entity.key.get() else entity.key
+        return model.transaction(txn).get()
 
     @classmethod
-    def create_or_update(cls, user_id, refresh_token):
+    def get_or_create(cls, user_id):
         entity = cls(key=model.Key(cls, user_id))
-        entity.populate(refresh_token=refresh_token)
 
         def txn(): return entity.put() if not entity.key.get() else entity.key
-        retval = model.transaction(txn).get()
-        return retval
+        return model.transaction(txn).get()
