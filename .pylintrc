@@ -1,0 +1,2 @@
+[MASTER]
+init-hook='import sys; sys.path.append("/Users/markornb/projects/monzo-duo/src/lib"); sys.path.append("/Users/markornb/projects/monzo-duo/venv")'
