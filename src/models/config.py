@@ -1,3 +1,7 @@
+"""
+DataStore model for sensitive configuration info
+"""
+# pylint: disable=C0103
 from os import environ
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
@@ -27,7 +31,9 @@ class Config(ndb.Model):
         entity = cls(key=model.Key(cls, name))
         entity.populate(value=NOT_SET_VALUE)
 
-        def txn(): return entity.put() if not entity.key.get() else entity.key
+        def txn():
+            return entity.put() if not entity.key.get() else entity.key
+
         retval = model.transaction(txn).get()
 
         # Fall back to environment vars

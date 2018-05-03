@@ -1,0 +1,35 @@
+<h1>Settings</h1>
+<p>{{text}}</p>
+<form method="post" action="">
+    <label for="display_name">First Name:</label>
+    <input type="text" name="display_name" id="display_name" value="{{user.display_name}}">
+    <label for="display_initials">Initials:</label>
+    <input type="text" name="display_initials" id="display_initials" value="{{user.display_initials}}">
+    <label for="account_id">Active account:</label>
+    <select name="account_id" id="account_id">
+        {% for account in accounts %}
+        <option value="{{account.id}}" {% if account.id==user.account_id %}selected{% endif %}>{{account.sort_code}} {{account.account_number}}</option>
+        {% endfor %}
+    </select>
+    <fieldset>
+        <legend>Which categories should trigger an immediate notification?</legend>
+        {% for category in transaction_categories %}
+        <input type="checkbox" name="notify_categories" id="{{ category }}" value="{{ category }}" {% if category in user.notify_categories
+            %}checked{% endif %}>
+        <label for="{{ category }}">{{ category|capitalize }}</label>
+        {% endfor %}
+    </fieldset>
+    <fieldset>
+        <legend>Also notify</legend>
+        <input type="checkbox" name="notify_daily" id="notify_daily" value="true" {% if user.notify_daily %}checked{% endif %}>
+        <label for="notify_daily">Daily</label>
+        <input type="checkbox" name="notify_weekly" id="notify_weekly" value="true" {% if user.notify_weekly %}checked{% endif %}>
+        <label for="notify_weekly">Weekly</label>
+        <input type="checkbox" name="notify_monthly" id="notify_monthly" value="true" {% if user.notify_monthly %}checked{% endif
+            %}>
+        <label for="notify_monthly">Monthly</label>
+        <label for="notify_spend_over">single transaction spend over:</label>
+        <input type="text" name="notify_spend_over" id="notify_spend_over" value="{{user.notify_spend_over}}">
+    </fieldset>
+    <input type="submit" value="Save">
+</form>

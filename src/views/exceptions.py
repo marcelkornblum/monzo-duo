@@ -1,0 +1,4 @@
+
+
+class LoginRequiredError(Exception):
+    pass

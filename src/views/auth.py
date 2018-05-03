@@ -5,11 +5,11 @@ import os
 from base64 import b64encode
 import logging
 
+from gaesessions import get_current_session
 import jinja2
 import webapp2
 
-from gaesessions import get_current_session
-from models.user import User
+import models
 import monzo
 
 
@@ -24,8 +24,6 @@ class Logout(webapp2.RequestHandler):
 
     def get(self):
         session = get_current_session()
-        if session.get('access_token', None) is not None:
-            del session['access_token']
         if session.get('monzo_id', None) is not None:
             del session['monzo_id']
 
@@ -64,7 +62,8 @@ class OauthCallback(webapp2.RequestHandler):
         returned_state = self.request.GET['state']
         if session_state is None:
             status_code = 400
-            response_text = "State cookie not set or expired. Maybe you took too long to authorize. Please try again."
+            response_text = ("State cookie not set or expired. "
+                             "Maybe you took too long to authorize. Please try again.")
             logging.info("No state param found on session")
         elif returned_state is None:
             status_code = 400
@@ -86,11 +85,11 @@ class OauthCallback(webapp2.RequestHandler):
                 # Successful token exchange; set up session and Datastore
                 logging.info("Successful oAuth token exchange")
                 session.regenerate_id()
-                session['access_token'] = responses['access_token']
                 session['monzo_id'] = responses['user_id']
 
-                user = User.get_or_create(responses['user_id'])
+                user = models.User.get_or_create(responses['user_id'])
                 user.refresh_token = responses['refresh_token']
+                user.access_token = responses['access_token']
                 user.put()
 
         if status_code != 200:
