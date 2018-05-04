@@ -1,6 +1,20 @@
+{% extends "base.html" %} 
+
+{% block title %}Settings{% endblock %} 
+
+{% block content %}
 <h1>Settings</h1>
 <p>{{text}}</p>
 <form method="post" action="">
+<fieldset><legend>Your partner</legend>
+{% if partner is not none %}
+You are connected to {{ partner.display_name }}
+{% else %}
+You will need to connect with a partner (coming soon!)
+{% endif %}
+</fieldset>
+<fieldset>
+<legend>About you</legend>
     <label for="display_name">First Name:</label>
     <input type="text" name="display_name" id="display_name" value="{{user.display_name}}">
     <label for="display_initials">Initials:</label>
@@ -12,15 +26,7 @@
         {% endfor %}
     </select>
     <fieldset>
-        <legend>Which categories should trigger an immediate notification?</legend>
-        {% for category in transaction_categories %}
-        <input type="checkbox" name="notify_categories" id="{{ category }}" value="{{ category }}" {% if category in user.notify_categories
-            %}checked{% endif %}>
-        <label for="{{ category }}">{{ category|capitalize }}</label>
-        {% endfor %}
-    </fieldset>
-    <fieldset>
-        <legend>Also notify</legend>
+        <legend>Notify me about my partner's transactions</legend>
         <input type="checkbox" name="notify_daily" id="notify_daily" value="true" {% if user.notify_daily %}checked{% endif %}>
         <label for="notify_daily">Daily</label>
         <input type="checkbox" name="notify_weekly" id="notify_weekly" value="true" {% if user.notify_weekly %}checked{% endif %}>
@@ -28,8 +34,19 @@
         <input type="checkbox" name="notify_monthly" id="notify_monthly" value="true" {% if user.notify_monthly %}checked{% endif
             %}>
         <label for="notify_monthly">Monthly</label>
-        <label for="notify_spend_over">single transaction spend over:</label>
+        <label for="notify_spend_over">Any single transaction spend over:</label>
         <input type="text" name="notify_spend_over" id="notify_spend_over" value="{{user.notify_spend_over}}">
+    <fieldset>
+        <legend>Any transaction in the following categories:</legend>
+        {% for category in transaction_categories %}
+        <input type="checkbox" name="notify_categories" id="{{ category }}" value="{{ category }}" {% if category in user.notify_categories
+            %}checked{% endif %}>
+        <label for="{{ category }}">{{ category|capitalize }}</label>
+        {% endfor %}
+    </fieldset>
+    </fieldset>
     </fieldset>
     <input type="submit" value="Save">
 </form>
+{% endblock %}
+

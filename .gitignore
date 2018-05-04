@@ -61,3 +61,5 @@ typings/
 venv/*
 
 src/lib/*
+
+src/dev.yaml

@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+{% import "helpers/macros.html" as macros %} 
+
+{% block title %}Summary{% endblock %} 
+
+{% block content %} 
+{% include "includes/namebanner.html" %}
+
+<div class="transaction_container">
+    {% for cat, details in categories.iteritems() %}
+    <div class="category">
+        <span class="subtotal user">
+            {{ macros.currency(details.user.total, symbol='&pound;') }}
+            <span class="count">{{ details.user.count }} transactions</span>
+        </span>
+        <span class="subtotal partner">
+            {{ macros.currency(details.partner.total, symbol='&pound;') }}
+            <span class="count">{{ details.partner.count }} transactions</span>
+        </span>
+        <span class="total">
+            {{ macros.currency(details.user.total + details.partner.total, symbol='&pound;') }}
+            {# <span class="count">{{ details.user.count + details.partner.count }} transactions</span> #}
+        </span>
+        <span class="title">{{ macros.category_icon(cat) }}{{ macros.category_display_name(cat) }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

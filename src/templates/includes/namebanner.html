@@ -1,0 +1,25 @@
+{% import "helpers/macros.html" as macros %}
+<div class="name_banner">
+    <div>
+        <div>
+            <span class="name">{{ user_display_name }}</span>
+        </div>
+        <div>{{ macros.currency(user_balance, symbol=user_balance_symbol, css_prefix='balance_') }}</div>
+        <div>{{ macros.currency(user_spend, symbol=user_balance_symbol, css_prefix='balance_') }}</div>
+    </div>
+    <div>
+        <div>
+            <span class="description">Balance</span>
+        </div>
+        <div>
+            <span class="description">Spent today</span>
+        </div>
+    </div>
+    <div>
+        <div>
+            <span class="name">{{ partner_display_name }}</span>
+        </div>
+        <div>{{ macros.currency(partner_balance, symbol=partner_balance_symbol, css_prefix='balance_') }}</div>
+        <div>{{ macros.currency(partner_spend, symbol=partner_balance_symbol, css_prefix='balance_') }}</div>
+    </div>
+</div>

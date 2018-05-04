@@ -87,7 +87,7 @@ class OauthCallback(webapp2.RequestHandler):
                 session.regenerate_id()
                 session['monzo_id'] = responses['user_id']
 
-                user = models.User.get_or_create(responses['user_id'])
+                user = models.user.User.get_or_create(responses['user_id'])
                 user.refresh_token = responses['refresh_token']
                 user.access_token = responses['access_token']
                 user.put()

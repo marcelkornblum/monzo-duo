@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+{% import "helpers/macros.html" as macros %}
+
+{% block title %}Recent Transactions{% endblock %} 
+
+{% block content %} 
+{% include "includes/namebanner.html" %}
+
+<div class="transaction_container">
+    {% for trx in transactions %} {% if loop.changed(trx.created|date_format) %}
+    <h3>{{ trx.created|date_format }}</h3>
+    {% endif %}
+    <div class="transaction {% if trx.account_id == user_account_id %}user{% else %}partner{% endif %}">
+        <span class="value">{{ macros.currency(trx.amount) }}</span>
+        <span class="category">{{ macros.category_icon(trx.category) }}</span>
+        <span class="name">{{ trx.merchant.name if trx.merchant != None else trx.notes }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,17 +1,19 @@
 """
 Wrappers for Monzo API calls, including some logic
 """
-# pylint: disable=E1101
+# pylint: disable=E1101,E0401
 import logging
+from google.appengine.api import urlfetch
 
 import requests
 import requests_toolbelt.adapters.appengine
 
-from models import Config
+from constants import URL_BASE, MONZO_CLIENT_ID, MONZO_CLIENT_SECRET
 
 requests_toolbelt.adapters.appengine.monkeypatch()
+urlfetch.set_default_fetch_deadline(45)
 
-URL_BASE = 'https://monzo-duo-202412.appspot.com'
+
 REDIRECT_URI = '%s/oauth/callback' % URL_BASE
 WEBHOOK_URI = '%s/webhooks' % URL_BASE
 API_BASE = 'https://api.monzo.com'
@@ -21,7 +23,7 @@ def build_oauth_redirect(state):
     """
     Creates the oAuth redirect target
     """
-    client_id = Config.get('MONZO_CLIENT_ID')
+    client_id = MONZO_CLIENT_ID
     redirect_uri = REDIRECT_URI
     redirect_tgt = ('https://auth.monzo.com/?client_id=%s'
                     '&redirect_uri=%s&response_type=code&state=%s') % (
@@ -41,16 +43,21 @@ def _call_api(endpoint, payload=None, auth_token=None, method='GET'):
     else:
         headers = None
 
-    if method == 'GET':
-        api_call = requests.get(uri, params=payload, headers=headers)
-    elif method == 'POST':
-        api_call = requests.post(uri, payload, headers=headers)
-    elif method == 'PUT':
-        api_call = requests.put(uri, payload, headers=headers)
-    elif method == 'PATCH':
-        api_call = requests.patch(uri, payload, headers=headers)
-    elif method == 'DELETE':
-        api_call = requests.delete(uri, headers=headers)
+    try:
+        if method == 'GET':
+            api_call = requests.get(uri, params=payload, headers=headers)
+        elif method == 'POST':
+            api_call = requests.post(uri, payload, headers=headers)
+        elif method == 'PUT':
+            api_call = requests.put(uri, payload, headers=headers)
+        elif method == 'PATCH':
+            api_call = requests.patch(uri, payload, headers=headers)
+        elif method == 'DELETE':
+            api_call = requests.delete(uri, headers=headers)
+
+        logging.info("[%s] %s", method, api_call.url)
+    except urlfetch.errors.DeadlineExceededError:
+        return _call_api(endpoint, payload=payload, auth_token=auth_token, method=method)
 
     if api_call.status_code != requests.codes.ok:
         logging.error(
@@ -71,8 +78,8 @@ def exchange_oauth_token(auth_code):
     """
     payload = {
         'grant_type': 'authorization_code',
-        'client_id': Config.get('MONZO_CLIENT_ID'),
-        'client_secret': Config.get('MONZO_CLIENT_SECRET'),
+        'client_id': MONZO_CLIENT_ID,
+        'client_secret': MONZO_CLIENT_SECRET,
         'redirect_uri': REDIRECT_URI,
         'code': auth_code
     }
@@ -80,36 +87,34 @@ def exchange_oauth_token(auth_code):
     return _call_api('/oauth2/token', payload, None, 'POST')
 
 
-def refresh_access_token(auth_token, refresh_token):
+def refresh_access_token(refresh_token):
     """
     Uses the refresh token to retrieve a new auth token
     """
     payload = {
         'grant_type': 'refresh_token',
-        'client_id': Config.get('MONZO_CLIENT_ID'),
-        'client_secret': Config.get('MONZO_CLIENT_SECRET'),
+        'client_id': MONZO_CLIENT_ID,
+        'client_secret': MONZO_CLIENT_SECRET,
         'refresh_token': refresh_token
     }
 
-    return _call_api('/oauth2/token', payload, auth_token, 'POST')
+    return _call_api('/oauth2/token', payload, None, 'POST')
 
 
 def _call_user_api(user, url, payload=None, **kwargs):
     """
     Adds token refresh functionality and user identity switching to basic API call handler
     """
-    logging.info('user API called with %s, %s', user.account_id, kwargs)
     updated_kwargs = dict(kwargs, auth_token=user.access_token)
     if payload is not None:
         updated_kwargs['payload'] = payload
 
     (status, response) = _call_api(url, **updated_kwargs)
-    logging.info('called api: %s %s', status, response)
 
     if status == 401:
         (refresh_status, refresh_response) = refresh_access_token(
-            user.access_token, user.refresh_token)
-        logging.info('refreshing access token: %i', status)
+            user.refresh_token)
+        logging.info('refresh access token status: %i', refresh_status)
 
         if refresh_status == requests.codes.ok:
             user.access_token = refresh_response['access_token']
@@ -183,12 +188,15 @@ def delete_webhook(user, webhook_id):
     return _call_user_api(user, '/webhooks/%s' % webhook_id, method='DELETE')
 
 
-def list_transactions(user):
+def list_transactions(user, limit=None, since=None, before=None):
     """
     Gets a list of the user's transactions
     """
-    (status, data) = _call_user_api(user, '/transactions', {
-        'account_id': user.account_id
+    (status, data) = _call_user_api(user, '/transactions?expand[]=merchant', {
+        'account_id': user.account_id,
+        'limit': limit,
+        'before': before,
+        'since': since,
     })
     if status != requests.codes.ok:
         return []

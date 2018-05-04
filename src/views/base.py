@@ -6,7 +6,7 @@ import logging
 import webapp2
 
 import constants
-from .exceptions import LoginRequiredError
+from .exceptions import LoginRequiredError, UserSetupRequiredError
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -14,5 +14,7 @@ class BaseHandler(webapp2.RequestHandler):
         logging.exception(exception)
         if isinstance(exception, LoginRequiredError):
             self.redirect(constants.LOGIN_PATH)
+        elif isinstance(exception, UserSetupRequiredError):
+            self.redirect('/settings')
         else:
             super(BaseHandler, self).handle_exception(exception, debug_mode)

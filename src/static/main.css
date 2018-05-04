@@ -1,0 +1,250 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+h2,
+h3 {
+  font-weight: normal;
+}
+
+.header,
+.name_banner {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  background-color: #001230;
+  color: #ffffff;
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+  box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+}
+
+.header h2 {
+  display: inline-block;
+  font-size: 1em;
+  margin: 0;
+  padding: 15px 10px 10px 10px;
+}
+
+.header a {
+  margin-left: auto;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.2em;
+  padding: 15px 10px 10px 10px;
+}
+
+.content {
+  padding-top: calc(20px + 1.7em);
+}
+
+nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+
+  background-color: #001230;
+  color: #ffffff;
+}
+
+nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+
+  color: #ffffff;
+  font-size: 0.9em;
+  padding: 8px 0;
+}
+
+nav a:visited {
+  color: #ffffff;
+}
+
+nav i,
+nav span {
+  flex: 1 100%;
+  padding: 2px 0;
+}
+
+nav i {
+  font-size: 1.5em;
+}
+
+.name_banner {
+  top: calc(20px + 1.7em);
+  border-top: 1px dashed #999;
+}
+
+.name_banner > div {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 10px;
+}
+
+.name_banner > div:nth-child(2) {
+  margin: auto auto 0 auto;
+  text-align: center;
+}
+
+.name_banner > div:nth-child(3) {
+  text-align: right;
+}
+
+.name_banner span.balance_main {
+  font-size: 1.5em;
+}
+
+.name_banner span.name {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.name_banner span.balance_symbol,
+.name_banner span.balance_sub,
+.name_banner span.description {
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.name_banner span.description {
+  display: inline-block;
+  margin-top: 0.5em;
+  margin-bottom: -1px;
+}
+
+.transaction_container {
+  margin-top: calc(30px + 5em);
+  margin-bottom: calc(25px + 1.7em);
+  padding: 10px;
+}
+
+.transaction_container h3 {
+  font-size: 0.9em;
+  color: #999;
+}
+
+.transaction {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  align-items: flex-end;
+  max-height: 1.7em;
+}
+
+.transaction .value {
+  flex: 0 70px;
+  order: 1;
+}
+
+.transaction .value .main {
+  font-size: 1.5em;
+}
+
+.transaction .category {
+  order: 2;
+  flex: 0 25px;
+  font-size: 1.2em;
+}
+
+.transaction .name {
+  flex: 1 auto;
+  order: 2;
+  font-size: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.transaction.partner .value {
+  order: 4;
+  text-align: right;
+}
+
+.transaction.partner .category {
+  margin-left: 70px;
+}
+
+.category {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 15px 10px;
+  margin: 10px 0;
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+  box-shadow: 2px 2px 5px 0px rgba(186, 186, 186, 1);
+}
+
+.category .title {
+  flex: 1 100%;
+  order: 1;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.category .title i.fas {
+  margin-right: 10px;
+}
+
+.category .total {
+  flex: 1 auto;
+  order: 3;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.category .total .main {
+  font-size: 1.4em;
+}
+
+.category .total .symbol,
+.category .total .sub {
+  font-size: 1em;
+}
+
+.category .subtotal {
+  flex: 0 75px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.category .subtotal .main {
+  font-size: 1.2em;
+}
+
+.category .subtotal .symbol,
+.category .subtotal .sub {
+  font-size: 0.8em;
+}
+
+.category .total > *,
+.category .subtotal > * {
+  flex: 0 auto;
+}
+
+.category .count {
+  flex: 1 100%;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.category .subtotal.user {
+  order: 2;
+}
+
+.category .subtotal.partner {
+  order: 4;
+  justify-content: flex-end;
+}

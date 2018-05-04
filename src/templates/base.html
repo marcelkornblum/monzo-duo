@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/static/normalize.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.11/css/all.css" integrity="sha384-p2jx59pefphTFIpeqCcISO9MdVfIm4pNnsL08A6v5vaQc4owkQqxMV8kg4Yvhaw/" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/main.css" />
+    <title>{% block title %}{% endblock %} - MonzoDuo</title>
+    {% endblock %}
+</head>
+
+<body>
+<div class="header"><h2>{{ self.title() }}</h2><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></div>
+    <nav>{% include "includes/navigation.html" %}</nav>
+    <div class="content">{% block content %}{% endblock %}</div>
+    <div class="footer">
+        {% include "includes/footer.html" %}
+    </div>
+</body>
+
+</html>

@@ -4,7 +4,7 @@ Processing for webhooks
 import logging
 import webapp2
 
-from models import User
+from models.user import User
 
 
 class Webhook(webapp2.RequestHandler):
@@ -21,4 +21,5 @@ class Webhook(webapp2.RequestHandler):
 
     def post(self, webhook_code):
         """Webhook listener for transaction info sent from Monzo"""
-        logging.info("webhook received: %s", self.request.get('data', 'NO_DATA'))
+        logging.info("webhook received: %s",
+                     self.request.get('data', 'NO_DATA'))

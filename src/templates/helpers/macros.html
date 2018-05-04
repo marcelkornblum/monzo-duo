@@ -1,0 +1,57 @@
+{% macro currency(value, symbol='', css_prefix='') -%} 
+    {# All numbers should be +ve #}
+    {% if value < 0 %} 
+        {% set val = 0 - value %} 
+    {% else %} 
+        {% set val = value %} 
+    {% endif %} 
+
+    {# pad with 0 so we have min 0.00, and stringify #}
+    {% set value_str = '{:0>3}'.format(val|string) %} 
+
+    {# we don't always want to show a symbol #}
+    {% if symbol !='' %} 
+        <span class="{{css_prefix}}symbol">{{ symbol|safe }}</span>
+    {% endif %}
+
+    <span class="{{css_prefix}}main">{{ value_str[:-2] }}</span><span class="{{css_prefix}}sub">.{{ value_str[-2:] }}</span>
+{%- endmacro %}
+
+{% macro category_icon(slug) -%}
+    {% if slug == 'general' %}
+        {% set icon = 'th-large' %}
+        {% set color = '#ccc' %}
+    {% elif slug == 'eating_out' %}
+        {% set icon = 'utensils' %}
+        {% set color = '#c11c35' %}
+    {% elif slug == 'expenses' %}
+        {% set icon = 'file' %}
+        {% set color = '#c6b46b' %}
+    {% elif slug == 'transport' %}
+        {% set icon = 'car' %}
+        {% set color = '#015142' %}
+    {% elif slug == 'cash' %}
+        {% set icon = 'hand-holding-usd' %}
+        {% set color = '#679161' %}
+    {% elif slug == 'bills' %}
+        {% set icon = 'lightbulb' %}
+        {% set color = '#73a8c6' %}
+    {% elif slug == 'entertainment' %}
+        {% set icon = 'smile' %}
+        {% set color = '#c17d1d' %}
+    {% elif slug == 'shopping' %}
+        {% set icon = 'shopping-bag' %}
+        {% set color = '#d6a589' %}
+    {% elif slug == 'holidays' %}
+        {% set icon = 'suitcase' %}
+        {% set color = '#b484d8' %}
+    {% elif slug == 'groceries' %}
+        {% set icon = 'lemon' %}
+        {% set color = '#c1ae19' %}
+    {% endif %}
+    <i class="fas fa-{{ icon }}" style="color: {{ color }}" alt="{{ category }}"></i>
+{%- endmacro %}
+
+{% macro category_display_name(slug) -%}
+{{ slug.replace('_', ' ')|capitalize }}
+{%- endmacro %}

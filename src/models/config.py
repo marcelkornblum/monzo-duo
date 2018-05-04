@@ -1,7 +1,7 @@
 """
 DataStore model for sensitive configuration info
 """
-# pylint: disable=C0103
+# pylint: disable=C0103,E0401
 from os import environ
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
