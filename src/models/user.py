@@ -144,7 +144,7 @@ class User(ndb.Model):
                                                before=before.strftime(
                                                    '%Y-%m-%dT%H:%M:%SZ')
                                                )
-        return [x for x in transactions if (x['amount'] < 0 and x['scheme'] != 'uk_retail_pot')]
+        return [x for x in transactions if (x['amount'] < 0 and x['scheme'] != 'uk_retail_pot') and 'decline_reason' not in x]
 
     def list_recent_category_expenses(self):
         """
