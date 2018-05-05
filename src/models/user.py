@@ -126,12 +126,12 @@ class User(ndb.Model):
         """
         return monzo.list_transactions(self, limit, since, before)
 
-    def list_recent_transactions(self, limit=25, days=7):
+    def list_recent_transactions(self, limit=100, days=7):
         """
         Returns a filtered list of the user's most recent outgoing transactions
         """
         before = datetime.now()
-        since = before.replace(
+        since = datetime.now().replace(
             hour=0,
             minute=0,
             second=0,
