@@ -241,5 +241,7 @@ def create_feed_item(user, title, image_url, **kwargs):
             params[key] = val
         else:
             params['params[%s]' % key] = val
+    
+    logging.info('params %s', params)
 
     return _call_user_api(user, '/feed', params, method='POST')

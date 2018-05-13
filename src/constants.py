@@ -18,6 +18,7 @@ TRANSACTION_CATEGORIES = (
 LOGIN_PATH = '/oauth/redirect'
 ENV = 'production'
 URL_BASE = 'https://monzo-duo-202412.appspot.com'
+APP_LOGO = 'https://pbs.twimg.com/profile_images/2226984247/spoon_400x400.jpg'
 MONZO_CLIENT_ID = Config.get('MONZO_CLIENT_ID')
 MONZO_CLIENT_SECRET = Config.get('MONZO_CLIENT_SECRET')
 

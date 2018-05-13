@@ -7,6 +7,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 import logging
 
+from constants import APP_LOGO, URL_BASE
 import monzo
 
 
@@ -178,8 +179,14 @@ class User(ndb.Model):
         """
         return monzo.annotate_transaction(self, transaction_id, payload)
 
-    def create_user_feed_item(self, title, image_url, **kwargs):
+    def create_user_feed_item(self, title, image_url=APP_LOGO, **kwargs):
         """
         Creates a feed item on the user's feed
         """
         return monzo.create_feed_item(self, title, image_url, **kwargs)
+
+    def create_feed_item(self, title, url=URL_BASE):
+        """
+        Creates a feed item notifying the user about a specific transaction
+        """
+        return self.create_user_feed_item(title, url=url)
